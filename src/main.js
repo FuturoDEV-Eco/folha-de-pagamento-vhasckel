@@ -7,6 +7,7 @@ const { calcularSalarioLiquido } = require("./calculo_salario_liquido");
 // console.log(calcularSalarioLiquido(2409));
 
 const readline = require("readline");
+const { gerarPDF } = require("./gerar_pdf");
 
 const formatarCPF = (cpf) => {
   return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
@@ -33,7 +34,14 @@ const retornaFolhaPagamento = () => {
         console.log(`Imposto de renda: R$ ${ir}`);
         console.log(`Salário líquido: R$ ${salarioLiquido}`);
 
-        input.close();
+        input.question("Deseja gerar um PDF? s/n ", (resposta) => {
+          if (resposta.toLocaleLowerCase() === "s") {
+            gerarPDF(name, cpf, salarioBruto, inss, ir, salarioLiquido);
+            console.log("PDF gerado com sucesso.");
+          } else {
+            console.log("Agradecemos a consulta.");
+          }
+        });
       });
     });
   });
